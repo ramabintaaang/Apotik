@@ -1,42 +1,43 @@
-<x-app-layout title="Supplier">
+<x-app-layout title="Katalog Obat">
    
-   @slot('header')
+   {{-- @slot('header')
    <div class="container-fluid mx-2  p-2">
-      <h1>Data Supplier</h1>
+      <h1>Data Obat</h1>
    </div>
-   @endslot
+   @endslot --}}
    
-
+   {{-- <button class="btn btn-success" id="btnModal">Tambah</button> --}}
    <div class="container-fluid mx-2  p-2">
-      <button class="btn btn-success" id="btnModal">Tambah Supplier</button>
    </div>
 
    <div class="row">
       <div class="col-12">
          <div class="card">
-         {{-- <div class="card-header">
-            <h3 class="card-title">DataTable with minimal features & hover style</h3>
-         </div> --}}
-         <!-- /.card-header -->
+            <div class="card-header text-center">
+            <h1 class="card-title font-weight-bold">Data Obat</h1>
+         </div> 
          <div class="card-body">
+            <button class="btn btn-success" id="btnModal">Tambah</button>
             <table id="table" class="table table-bordered table-hover">
                <thead>
                <tr>
                   <th>Nama</th>
-                  <th>Telepon</th>
-                  <th>Email</th>
-                  <th>Rekening</th>
-                  <th>Alamat</th>
+                  <th>Kode</th>
+                  <th>Dosis</th>
+                  <th>Indikasi</th>
+                  <th>Kategori</th>
+                  <th>Satuan</th>
                   <th>Aksi</th>
                </tr>
                </thead>
                <tfoot>
                <tr>
                   <th>Nama</th>
-                  <th>Telepon</th>
-                  <th>Email</th>
-                  <th>Rekening</th>
-                  <th>Alamat</th>
+                  <th>Kode</th>
+                  <th>Dosis</th>
+                  <th>Indikasi</th>
+                  <th>Kategori</th>
+                  <th>Satuan</th>
                   <th>Aksi</th>
                </tr>
                </tfoot>
@@ -49,42 +50,59 @@
 
 
 
-   <div class="modal fade" id="modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h4 id="judulModal"></h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
+<div class="modal fade" id="modal">
+   <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+         <h4 id="judulModal"></h4>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
       </div>
       <div class="modal-body">
-         <form action="{{route('storeSupplier')}}" method="post" id="form">
+         <form action="{{route('storeObat')}}" method="post" id="form">
                @csrf
                <div class="form-group">
-               <label for="nama">Kode</label>
-               <input type="hidden" class="form-control"  placeholder="Masukkan Nama" name="id" id="id">
+               <label for="id">id</label>
+               <input type="text" class="form-control"  placeholder="Kode" name="id" id="id" readonly="re">
                </div>
                <div class="form-group">
                <label for="nama">Nama</label>
                <input type="text" class="form-control"  placeholder="Masukkan Nama" name="nama" id="nama">
                </div>
                <div class="form-group">
-               <label for="telepon">Telepon</label>
-               <input type="text" name="telp" class="form-control" onkeypress="return inputAngka(event)" id="telp" placeholder="Masukkan No Telp">
+               <label for="telepon">Kode</label>
+               <input type="text" name="kode" maxlength="8" class="form-control" id="kode" placeholder="Masukkan No Kode">
                </div>
                <div class="form-group">
-               <label for="email">Email</label>
-               <input type="email" name="email" class="form-control" id="email" placeholder="Masukkan email">
+               <label for="dosis">Dosis</label>
+               <input type="text" name="dosis" class="form-control" id="dosis" placeholder="Masukkan dosis">
                </div>
                <div class="form-group">
-               <label for="Rekening">Rekening</label>
-               <input type="text" name="rekening" class="form-control" onkeypress="return inputAngka(event)"  id="rekening" placeholder="Masukkan no Rekening">
+               <label for="indikasi">Indikasi</label>
+               <input type="text" name="indikasi" class="form-control"  id="indikasi" placeholder="Masukkan no indikasi">
                </div>
-               <div class="form-group">
-               <label for="alamat">Alamat</label>
-               <input type="text" name="alamat" class="form-control" id="alamat" placeholder="Masukkan alamat">
+               <div class="form-row">
+               <div class="form-group col-6">
+               <label for="Satuan">Satuan</label>
+               <select name="satuan" id="satuan" class="form-control">
+                  <option value="">Pilih Satuan</option>
+                  @foreach ($satuan as $a )
+                     <option value="{{$a->id}}">{{$a->satuan}}</option>
+                  @endforeach
+               </select>
                </div>
+               <div class="form-group col-6">
+               <label for="kategori">Kategori</label>
+               <select name="kategori" id="kategori" class="form-control">
+                  <option value="">Pilih kategori</option>
+                  @foreach ($kategori as $a )
+                     <option value="{{$a->id}}">{{$a->kategori}}</option>
+                  @endforeach
+               </select>
+               </div>
+               </div>
+               
          </div>
          <div class="modal-footer justify-content-between">
                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -119,14 +137,15 @@
             processing:true,
             destroy:true,
             // responsive:true,
-            ajax: "{{route('getSupplier')}}",
+            ajax: "{{route('getObat')}}",
             columns:[
                // {data : 'DT_RowIndex', name: 'DT_RowIndex'},
                {data : 'nama', name: 'nama'},
-               {data : 'telp', name: 'telp'},
-               {data : 'email', name: 'email'},
-               {data : 'rekening', name: 'rekening'},
-               {data : 'alamat', name: 'alamat'},
+               {data : 'kode', name: 'kode'},
+               {data : 'dosis', name: 'dosis'},
+               {data : 'indikasi', name: 'indikasi'},
+               {data : 'kategori', name: 'kategoris'},
+               {data : 'satuan', name: 'satuans'},
                {data : 'aksi', name: 'aksi',orderable:false}
             ],
       });
@@ -141,9 +160,9 @@
    }
 
    $('#btnModal').click(function (e) { 
-      e.preventDefault();
+      $('#judulModal').html('Tambah Obat');
+      e.preventDefault()
       $('#form')[0].reset()
-      $('#judulModal').html('Tambah Supplier');
       $('#modal').modal('show');
       
    });
@@ -176,7 +195,7 @@
       let id = $(this).attr('id')
       $.ajax({
          type: "POST",
-         url: "{{route('editSupplier')}}",
+         url: "{{route('editObat')}}",
          data: {
             id : id,
             _token : "{{csrf_token()}}",
@@ -185,14 +204,15 @@
          success: function (res) {
             console.log(res)
             $('#modal').modal('show')
-            $('#judulModal').html('Edit Supplier')
+            $('#judulModal').html('Edit Obat')
             $('#id').val(res.data.id)
             $('#nama').val(res.data.nama)
-            $('#telp').val(res.data.telp)
-            $('#alamat').val(res.data.alamat)
-            $('#rekening').val(res.data.rekening)
-            $('#email').val(res.data.email)
-            $('#form').attr('action',"{{route('updateSupplier')}}") 
+            $('#kode').val(res.data.kode)
+            $('#dosis').val(res.data.dosis)
+            $('#indikasi').val(res.data.indikasi)
+            $('#satuan').val(res.data.satuan)
+            $('#kategori').val(res.data.kategori)
+            $('#form').attr('action',"{{route('updateObat')}}") 
             
          // console.log(res) ;
          },error:function(xhr){
@@ -210,7 +230,7 @@ $(document).on('click', '.hapus',function () {
       if (c){
       $.ajax({
          type: "POST",
-         url: "{{route('deleteSupplier')}}",
+         url: "{{route('deleteObat')}}",
          data: {
             id : id,
             _token : "{{csrf_token()}}",
