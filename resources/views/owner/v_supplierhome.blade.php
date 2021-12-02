@@ -127,7 +127,7 @@
         var data = new FormData(this)
         $.ajax({
             type: "post",
-            url: "{{route('storeSupplier')}}",
+            url: "{{route('addSupplier')}}",
             data: data,
             dataType: "json",
             processData : false,
@@ -141,5 +141,63 @@
             }
         });
     });
+
+
+
+    // $(document).on('click', '.edit',function () {
+      
+   //    // $('#form').attr('action',"{{route('updateSupplier')}}") 
+   //    let id = $(this).attr('id')
+   //    $.ajax({
+   //       type: "POST",
+   //       url: "{{route('updateSupplier',['id' => $data->id])}}",
+   //       data: {
+   //          id : id,
+   //          _token : "{{csrf_token()}}",
+   //       },
+   //       dataType: "json",
+   //       success: function (res) {
+   //          console.log(res)
+   //          $('#modal').modal('show')
+   //          $('#judulModal').html('Edit Supplier')
+   //          $('#id').val(res.data.id)
+   //          $('#nama').val(res.data.nama)
+   //          $('#telp').val(res.data.telp)
+   //          $('#alamat').val(res.data.alamat)
+   //          $('#rekening').val(res.data.rekening)
+   //          $('#email').val(res.data.email)
+   //          $('#form').attr('action',"{{route('updateSupplier')}}") 
+            
+   //       // console.log(res) ;
+   //       },error:function(xhr){
+   //          console.log(xhr)
+   //       },
+   //    });
+   // });
+
+
+
+// $(document).on('click', '.hapus',function () {
+//       let c = confirm('Yakin untuk menghapus ?')
+//       // $('#form').attr('action',"{{route('updateSupplier')}}") 
+//       let id = $(this).attr('id')
+//       if (c){
+//       $.ajax({
+//          type: "POST",
+//          url: "{{route('deleteSupplier')}}",
+//          data: {
+//             id : id,
+//             _token : "{{csrf_token()}}",
+//          },
+//          dataType: "json",
+//          success: function (res) {
+//          console.log(res);
+//          loaddata()
+//          },error:function(xhr){
+//             console.log(xhr)
+//          },
+//       });
+//       }
+//    });
 
 </script>

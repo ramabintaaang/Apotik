@@ -7,6 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
  <link rel="stylesheet" href={{asset('plugins/fontawesome-free/css/all.min.css')}}>
+ <link rel="stylesheet" href={{asset('plugins/sweetalert2/sweetalert2.min.css')}}>
   
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -145,10 +146,10 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="{{route('dashboard')}}" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">Apotik</span>
     </a>
 
     <!-- Sidebar -->
@@ -186,7 +187,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                <a href="{{url('stockObat')}}" class="nav-link {{request()->is('stockobat') ? 'active' : ''}}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Stock Obat</p>
                 </a>
@@ -346,6 +347,8 @@
 <script src={{asset("plugins/datatables-responsive/js/responsive.bootstrap4.min.js")}}></script>
 <script src={{asset("plugins/datatables-buttons/js/dataTables.buttons.min.js")}}></script>
 <script src={{asset("plugins/datatables-buttons/js/buttons.bootstrap4.min.js")}}></script>
+<script src={{asset("plugins/sweetalert2/sweetalert2.all.min.js")}}></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{-- <script src={{asset("plugins/jszip/jszip.min.js")}}></script>
 <script src={{asset("plugins/pdfmake/pdfmake.min.js")}}></script>
 <script src={{asset("plugins/pdfmake/vfs_fonts.js")}}></script>

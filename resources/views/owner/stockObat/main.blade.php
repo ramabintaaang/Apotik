@@ -10,6 +10,32 @@
    <div class="container-fluid mx-2  p-2">
    </div>
 
+   <div class="container-fluid">
+      <div class="col-12">
+         <div class="card">
+            <div class="card-header">
+               <h1 class="card-title">Form stock obat</h1>
+            </div>
+            <div class="card-body">
+               <div class="input-group input-group-sm">
+                  <label for="" class="col-sm-1 col-form-label-lg-sm">Nama Obat</label>
+                  <input type="text" class="form-control col-sm-3" id="nama_obat" readonly>
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-info btn-flat" id="btnModalNamaObat"><i class="fas fa-search"></i></button>
+                  </span>
+                </div>
+               {{-- <div class="input-group input-group-sm">
+                  <label for="" class="col-sm-1 col-form-label-lg-sm">Nama Obat</label>
+                  <input type="text" class="form-control col-sm-3" id="nama_obat" readonly>
+                  <span class="input-group-append">
+                    <button type="button" class="btn btn-info btn-flat" id="btnModalNamaObat"><i class="fas fa-search"></i></button>
+                  </span>
+                </div>
+            </div> --}}
+         </div>
+      </div>
+   </div>
+
    <div class="row">
       <div class="col-12">
          <div class="card">
@@ -22,22 +48,18 @@
                <thead>
                <tr>
                   <th>Nama</th>
-                  <th>Kode</th>
-                  <th>Dosis</th>
-                  <th>Indikasi</th>
-                  <th>Kategori</th>
-                  <th>Satuan</th>
+                  <th>Stock</th>
+                  <th>Harga beli</th>
+                  <th>Harga beli</th>
                   <th>Aksi</th>
                </tr>
                </thead>
                <tfoot>
                <tr>
                   <th>Nama</th>
-                  <th>Kode</th>
-                  <th>Dosis</th>
-                  <th>Indikasi</th>
-                  <th>Kategori</th>
-                  <th>Satuan</th>
+                  <th>Stock</th>
+                  <th>Harga beli</th>
+                  <th>Harga beli</th>
                   <th>Aksi</th>
                </tr>
                </tfoot>
@@ -50,71 +72,8 @@
 
 
 
-<div class="modal fade" id="modal">
-   <div class="modal-dialog">
-      <div class="modal-content">
-      <div class="modal-header">
-         <h4 id="judulModal"></h4>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-         <span aria-hidden="true">&times;</span>
-         </button>
-      </div>
-      <div class="modal-body">
-         <form action="{{route('storeObat')}}" method="post" id="form">
-               @csrf
-               <div class="form-group">
-               <label for="id">id</label>
-               <input type="text" class="form-control"  placeholder="Kode" name="id" id="id" readonly>
-               </div>
-               <div class="form-group">
-               <label for="nama">Nama</label>
-               <input type="text" class="form-control"  placeholder="Masukkan Nama" name="nama" id="nama">
-               </div>
-               <div class="form-group">
-               <label for="telepon">Kode</label>
-               <input type="text" name="kode" maxlength="8" class="form-control" id="kode" placeholder="Masukkan No Kode">
-               </div>
-               <div class="form-group">
-               <label for="dosis">Dosis</label>
-               <input type="text" name="dosis" class="form-control" id="dosis" placeholder="Masukkan dosis">
-               </div>
-               <div class="form-group">
-               <label for="indikasi">Indikasi</label>
-               <input type="text" name="indikasi" class="form-control"  id="indikasi" placeholder="Masukkan no indikasi">
-               </div>
-               <div class="form-row">
-               <div class="form-group col-6">
-               <label for="Satuan">Satuan</label>
-               <select name="satuan" id="satuan" class="form-control">
-                  <option value="">Pilih Satuan</option>
-                  @foreach ($satuan as $a )
-                     <option value="{{$a->id}}">{{$a->satuan}}</option>
-                  @endforeach
-               </select>
-               </div>
-               <div class="form-group col-6">
-               <label for="kategori">Kategori</label>
-               <select name="kategori" id="kategori" class="form-control">
-                  <option value="">Pilih kategori</option>
-                  @foreach ($kategori as $a )
-                     <option value="{{$a->id}}">{{$a->kategori}}</option>
-                  @endforeach
-               </select>
-               </div>
-               </div>
-               
-         </div>
-         <div class="modal-footer justify-content-between">
-               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-               <button type="submit" class="btn btn-primary" id="btnSave">Save changes</button>
-         </div>
-      </form>
-      </div>
-      <!-- /.modal-content -->
-   </div>
-   <!-- /.modal-dialog -->
-   </div>
-
+ @include('owner.stockObat.modalNamaObat')
+ @include('owner.stockObat.modalMain')
 
    @push('js')
    <script>
@@ -136,22 +95,38 @@
             serverside:true,
             processing:true,
             destroy:true,
-            // responsive:true,
-            ajax: "{{route('getObat')}}",
+            responsive:true,
+            ajax: "{{route('getStockObat')}}",
             columns:[
                // {data : 'DT_RowIndex', name: 'DT_RowIndex'},
                {data : 'nama', name: 'nama'},
-               {data : 'kode', name: 'kode'},
-               {data : 'dosis', name: 'dosis'},
-               {data : 'indikasi', name: 'indikasi'},
-               {data : 'kategori', name: 'kategoris'},
-               {data : 'satuan', name: 'satuans'},
+               {data : 'stok', name: 'stok'},
+               {data : 'harga_beli', name: 'harga_beli'},
+               {data : 'harga_jual', name: 'harga_jual'},
+               // {data : 'kategori', name: 'kategoris'},
+               // {data : 'satuan', name: 'satuans'},
                {data : 'aksi', name: 'aksi',orderable:false}
             ],
       });
    }
 
-   
+   function getNamaObat()
+   {
+      $('#dt_namaobat').DataTable({
+            paging : true,
+            serverside:true,
+            processing:true,
+            destroy:true,
+            // responsive:true,
+            ajax: "{{route('getNamaObat')}}",
+            columns:[
+               // {data : 'DT_RowIndex', name: 'DT_RowIndex'},
+               {data : 'nama', name: 'nama'},
+               {data : 'kategori', name: 'kategoris'},
+               {data : 'aksi', name: 'aksi',orderable:false}
+            ],
+      });
+   }
 
    function inputAngka(evt)
    {
@@ -247,6 +222,22 @@ $(document).on('click', '.hapus',function () {
       });
       }
    });
+
+$('#btnModalNamaObat').click(function (e) { 
+   $('#modalNamaObat').modal('show')
+   getNamaObat()
+});
+
+$(document).on('click','.klik', function () {
+   let z = $(this).attr('value')
+   // let x = $(this).attr('value')
+   $('#nama_obat').val(z)
+   $('#modalNamaObat').modal('hide')
+
+   console.log(z)
+   // console.log(x)
+});
+
 </script>
 
       

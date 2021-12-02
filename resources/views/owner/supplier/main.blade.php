@@ -59,10 +59,11 @@
             </button>
       </div>
       <div class="modal-body">
-         <form action="{{route('storeSupplier')}}" method="post" id="form">
+         <form id="form">
                @csrf
                <div class="form-group">
-               <label for="nama">Kode</label>
+               {{-- <label for="nama">Kode</label> --}}
+               <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                <input type="hidden" class="form-control"  placeholder="Masukkan Nama" name="id" id="id">
                </div>
                <div class="form-group">
@@ -88,7 +89,7 @@
          </div>
          <div class="modal-footer justify-content-between">
                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-               <button type="submit" class="btn btn-primary" id="btnSave">Save changes</button>
+               <button type="button" class="btn btn-primary" id="btnSave">Save changes</button>
          </div>
       </form>
       </div>
@@ -104,6 +105,9 @@
       loaddata()
    });
 
+   var status = null
+   let id = $(this).attr('id')
+   var value = $('.edit').val()
    // new $.fn.dataTable.FixedHeader(table);
    
    // function responsiveDatatable(){
@@ -145,42 +149,32 @@
       $('#form')[0].reset()
       $('#judulModal').html('Tambah Supplier');
       $('#modal').modal('show');
+      status = 'c'
+   });
+
+   // $('.edit').click(function (e) { 
+   //    e.preventDefault();
+   //    status = 'u'
       
-   });
+   //    $.ajax({
+   //       type: "get",
+   //       url: "apotik.test/api/supplier/" + btn,
+   //       data: "data",
+   //       dataType: "json",
+   //       success: function (response) {
+            
+   //       }
+   //    });
+   // });
 
-
-   $(document).on('submit','form',function (e) {
-      e.preventDefault();
-      var data = new FormData(this)
-      $.ajax({
-         type: "post",
-         url: $(this).attr('action'),
-         data: data,
-         dataType: "json",
-         processData : false,
-         contentType : false,
-         success: function (response) {
-               $('#modal').modal('hide');
-               loaddata();
-         },
-         error : function (xhr) {  
-               console.log(xhr)
-         }
-      });
-   });
-
-   
    $(document).on('click', '.edit',function () {
-      
-      // $('#form').attr('action',"{{route('updateSupplier')}}") 
+      status = 'u'
       let id = $(this).attr('id')
+      var value = $('.edit').val()
       $.ajax({
-         type: "POST",
-         url: "{{route('editSupplier')}}",
-         data: {
-            id : id,
-            _token : "{{csrf_token()}}",
-         },
+         type: "get",
+         url: "http://apotik.test/api/supplier/" + value,
+         data: {},
          dataType: "json",
          success: function (res) {
             console.log(res)
@@ -192,8 +186,7 @@
             $('#alamat').val(res.data.alamat)
             $('#rekening').val(res.data.rekening)
             $('#email').val(res.data.email)
-            $('#form').attr('action',"{{route('updateSupplier')}}") 
-            
+            console.log(value)
          // console.log(res) ;
          },error:function(xhr){
             console.log(xhr)
@@ -203,28 +196,138 @@
 
 
 
-$(document).on('click', '.hapus',function () {
-      let c = confirm('Yakin untuk menghapus ?')
-      // $('#form').attr('action',"{{route('updateSupplier')}}") 
+      $(document).on('click', '.hapus',function () {
       let id = $(this).attr('id')
-      if (c){
-      $.ajax({
-         type: "POST",
-         url: "{{route('deleteSupplier')}}",
-         data: {
-            id : id,
-            _token : "{{csrf_token()}}",
-         },
-         dataType: "json",
-         success: function (res) {
-         console.log(res);
-         loaddata()
-         },error:function(xhr){
-            console.log(xhr)
-         },
+      var value = $('.edit').val()
+
+      Swal.fire({
+         title: 'Are you sure?',
+         text: "You won't be able to revert this!",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Yes, delete it!'
+         }).then((result) => {
+         if (result.isConfirmed) {
+            $.ajax({
+               type: "delete",
+               url: "http://apotik.test/api/deleteSupplier/" + value,
+               data: {
+                     _token : "{{csrf_token()}}",
+                     },
+               dataType: "json",
+               success: function (res) {
+                  Swal.fire(
+                  'Deleted!',
+                  'Your file has been deleted.',
+                  'success'
+                  )
+                  loaddata();
+               }
+            });
+         };
+         });
       });
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+            
+
+   $('#btnSave').click(function (e) { 
+      
+      e.preventDefault();
+      var value = $('.edit').val()
+      if(status == 'c'){
+         $.ajax({
+            type: "post",
+            url: "{{route('addSupplier')}}",
+            data: {
+               nama : $('#nama').val(),
+               telp : $('#telp').val(),
+               email : $('#email').val(),
+               rekening : $('#rekening').val(),
+               alamat : $('#alamat').val(),
+               _token : "{{csrf_token()}}",
+
+            },
+            dataType: "json",
+            success: function (response) {
+               $('#modal').modal('hide');
+               loaddata()
+               Swal.fire({
+               position: 'top-end',
+               icon: 'success',
+               title: 'Data berhasil ditambah',
+               showConfirmButton: false,
+               timer: 1500
+               })
+            }
+         });
+      } else if (status == 'u'){
+         $.ajax({
+            type: "post",
+            url: "http://apotik.test/api/updateSupplier/" + value,
+            data: {
+               nama : $('#nama').val(),
+               telp : $('#telp').val(),
+               email : $('#email').val(),
+               rekening : $('#rekening').val(),
+               alamat : $('#alamat').val(),
+               _token : "{{csrf_token()}}",
+            },
+            dataType: "json",
+            success: function (response) {
+               $('#modal').modal('hide')
+               loaddata()
+               Swal.fire({
+               position: 'top-end',
+               icon: 'success',
+               title: 'Data berhasil diupdate ',
+               showConfirmButton: false,
+               timer: 1500
+               })
+            }
+         });
       }
+      
    });
+   // $(document).on('submit','form',function (e) {
+   //    e.preventDefault();
+   //    var data = new FormData(this)
+   //    $.ajax({
+   //       type: "post",
+   //       url: $(this).attr('action'),
+   //       data: data,
+   //       dataType: "json",
+   //       processData : false,
+   //       contentType : false,
+   //       success: function (response) {
+   //             $('#modal').modal('hide');
+   //             loaddata();
+   //       },
+   //       error : function (xhr) {  
+   //             console.log(xhr)
+   //       }
+   //    });
+   // });
+
+   
+   
 </script>
 
       

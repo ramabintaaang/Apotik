@@ -21,8 +21,16 @@ class ObatController extends Controller
             return Datatables::of($data)
                 // ->addIndexColumn()
                 ->addColumn('aksi', function ($data) {
-                    $button = '<button class="btn btn-primary edit" id="' . $data->id . '" name="edit">Edit</button>';
-                    $button .= '<button class="btn btn-danger hapus ml-2" id="' . $data->id . '" name="hapus">Hapus</button>';
+                    $button = '<div class="btn-group">
+                        <button type="button" class="btn btn-primary edit" id="' . $data->id . '" >
+                            <i class="fas fa-pen-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger hapus" id="' . $data->id . '" >
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        </div>';
+                    // $button = '<button class="btn btn-primary edit" id="' . $data->id . '" name="edit">Edit</button>';
+                    // $button .= '<button class="btn btn-danger hapus ml-2" id="' . $data->id . '" name="hapus">Hapus</button>';
                     return $button;
                 })
                 ->rawColumns(['aksi'])
